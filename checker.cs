@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 
+
 class Checker
 
 {
@@ -45,8 +46,7 @@ class Checker
         return chargeRateIsOk(chargeRate);
     }
 
-
-    static void ExpectTrue(bool expression)
+    public static void IsExpectTrueOk(bool expression)
     {
         if (!expression)
         {
@@ -54,7 +54,11 @@ class Checker
             Environment.Exit(1);
         }
     }
-    static void ExpectFalse(bool expression)
+        static void ExpectTrue(Action<bool> IsExpectTrueOk, bool expression)
+    {
+        IsExpectTrueOk(expression);
+    }
+    static void IsExpectFalseOk(bool expression)
     {
         if (expression)
         {
@@ -62,11 +66,21 @@ class Checker
             Environment.Exit(1);
         }
     }
+
+    static void ExpectFalse(Action<bool> IsExpectFalseOk, bool expression)
+    {
+        IsExpectFalseOk(expression);
+    }
+
+
+
+
     static int Main()
     {
-        ExpectTrue(batteryIsOk(temperatureIsOk,25,socIsOk, 70, chargeRateIsOk,0.7f));
-        ExpectFalse(batteryIsOk(temperatureIsOk,50, socIsOk, 85, chargeRateIsOk, 0.0f));
+        ExpectTrue(IsExpectTrueOk, batteryIsOk(temperatureIsOk,25,socIsOk, 70, chargeRateIsOk,0.7f));
+        ExpectFalse(IsExpectFalseOk,batteryIsOk(temperatureIsOk,50, socIsOk, 85, chargeRateIsOk, 0.0f));
         Console.WriteLine("All ok");
         return 0;
     }
 }
+
