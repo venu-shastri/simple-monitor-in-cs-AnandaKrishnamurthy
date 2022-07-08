@@ -38,12 +38,11 @@ class Checker
             return true;
     }
 
-    static bool batteryIsOk(Func<float, bool> temperatureIsOk, float temperature, Func<float, bool> socIsOk, float soc, Func<float, bool> chargeRateIsOk, float chargeRate)
+    static bool batteryIsOk float temperature,  float soc,  float chargeRate, /* Array Of Function Pointers */ Func<float,bool> parameterVerifiers)
     {
 
-        return temperatureIsOk(temperature);
-        return socIsOk(soc);
-        return chargeRateIsOk(chargeRate);
+        /* iterate Through  Function Pointers Array , apply each function pointer*/
+     Delegate[] array= parameterVerifiers.GetInvocationList();
     }
 
     public static void IsExpectTrueOk(bool expression)
@@ -77,7 +76,13 @@ class Checker
 
     static int Main()
     {
-        ExpectTrue(IsExpectTrueOk, batteryIsOk(temperatureIsOk,25,socIsOk, 70, chargeRateIsOk,0.7f));
+      //Array of Function Pointers
+      Func<float,bool> _parameterVarifierFunctionObjects=new Func<float,bool>(temperatureIsOk);
+      _parameterVarifierFunctionObjects+=Func<float,bool>(socIsOk);
+      _parameterVarifierFunctionObjects+=Func<float,bool>(chargeRateIsOk);
+      
+      
+        ExpectTrue(IsExpectTrueOk, batteryIsOk(25,70, 0.7f,_parameterVarifierFunctionObjects);
         ExpectFalse(IsExpectFalseOk,batteryIsOk(temperatureIsOk,50, socIsOk, 85, chargeRateIsOk, 0.0f));
         Console.WriteLine("All ok");
         return 0;
